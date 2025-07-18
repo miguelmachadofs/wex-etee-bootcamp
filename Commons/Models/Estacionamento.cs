@@ -1,0 +1,56 @@
+namespace Commons.Models
+{
+    public class Estacionamento
+    {
+        public decimal PrecoEntrada { get; set; }
+        public decimal PrecoHora { get; set; }
+        public List<VeiculoEstacionamento> Veiculos { get; set; } = new List<VeiculoEstacionamento>();
+
+        public Estacionamento(decimal precoEntrada, decimal precoHora)
+        {
+            PrecoEntrada = precoEntrada;
+            PrecoHora = precoHora;
+        }
+
+        public void CadastrarVeiculo(string placa)
+        {
+            Veiculos.Add(new VeiculoEstacionamento(placa));
+            Console.WriteLine($"Veículo com placa {placa} cadastrado com sucesso.");
+        }
+
+        public void RemoverVeiculo(VeiculoEstacionamento veiculo)
+        {
+            if (Veiculos.Remove(veiculo))
+            {
+                Console.WriteLine($"Veículo com placa {veiculo.Placa} removido com sucesso do sistema.");
+            }
+            else
+            {
+                Console.WriteLine($"ERRO: Não foi possível remover o veículo com placa {veiculo.Placa} do sistema.");
+            }
+        }
+
+        public void ListarVeiculos()
+        {
+            if (!Veiculos.Any())
+            {
+                Console.WriteLine("Nenhum veículo cadastrado.");
+            }
+            else
+            {
+                Console.WriteLine("Veículos cadastrados:");
+                foreach (VeiculoEstacionamento veiculo in Veiculos)
+                {
+                    Console.WriteLine($"{veiculo.Placa}");
+                }
+            }
+        }
+
+        public decimal CalcularValorTotal(DateTime dataEntrada)
+        {
+            //Utilizado os segundos como teste, para que o valor fique maior
+            int segundosEstacionado = (DateTime.Now - dataEntrada).Seconds;
+            return PrecoEntrada + (PrecoHora * segundosEstacionado);
+        }
+    }
+}
