@@ -6,10 +6,11 @@ namespace Commons.Models
         public Suite Suite { get; set; } = new();
         public int DiasReservados { get; set; }
 
-        public Reserva(Suite suite, int diasReservados)
+        public Reserva(int diasReservados, Suite suite, List<Pessoa> hospedes)
         {
-            Suite = suite;
             DiasReservados = diasReservados;
+            Suite = suite;
+            Hospedes = hospedes;
         }
 
         public void CadastrarHospede(Pessoa hospede)
