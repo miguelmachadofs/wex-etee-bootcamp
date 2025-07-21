@@ -24,7 +24,7 @@ class Program
                     {
                         // Verifica se o veículo já está cadastrado
                         // Se não estiver, cadastra o veículo no estacionamento
-                        if (!VeiculoEstaCadastrado(placa, estacionamento.Veiculos))
+                        if (BuscaVeiculo(placa, estacionamento.Veiculos) == null)
                         {
                             estacionamento.CadastrarVeiculo(placa);
                         }
@@ -40,23 +40,23 @@ class Program
                     {
                         // Verifica se o veículo está cadastrado
                         // Se estiver, calcula o valor total a pagar e remove o veículo do estacionamento
-                        if (VeiculoEstaCadastrado(placa, estacionamento.Veiculos))
+                        var veiculo = BuscaVeiculo(placa, estacionamento.Veiculos);
+                        if (veiculo != null)
                         {
-                            var veiculo = estacionamento.Veiculos.FirstOrDefault(v => v.Placa == placa);
-                            if (veiculo != null)
-                            {
-                                // Calcular o valor total a pagar
-                                decimal valorTotal = estacionamento.CalcularValorTotal(veiculo.DataEntrada);
-                                Console.WriteLine($"Valor total a pagar: R$ {valorTotal:F2}");
-                                Console.ReadLine(); // Espera o usuário pressionar Enter para continuar
-                                Console.WriteLine($"Veículo com placa {placa} disponível para retirada.");
+                            // Calcular o valor total a pagar
+                            decimal valorTotal = estacionamento.CalcularValorTotal(veiculo.DataEntrada);
+                            Console.WriteLine($"Valor total a pagar: R$ {valorTotal:F2}");
+                            Console.ReadLine(); // Espera o usuário pressionar Enter para continuar
+                            Console.WriteLine($"Veículo com placa {placa} disponível para retirada.");
 
-                                // Remover o veículo do estacionamento
-                                estacionamento.RemoverVeiculo(veiculo);
+                            // Remover o veículo do estacionamento
+                            if (estacionamento.RemoverVeiculo(veiculo))
+                            {
+                                Console.WriteLine($"Veículo com placa {placa} removido com sucesso.");
                             }
                             else
                             {
-                                Console.WriteLine("ERRO: Veículo não encontrado.");
+                                Console.WriteLine($"Não foi possível remover o veículo com placa {placa} do sistema.");
                             }
                         }
                         else
@@ -84,16 +84,16 @@ class Program
 
     private static void ExibirMenu()
     {
-        Console.WriteLine("1 - Cadastrar veículo");
+        Console.WriteLine("\n1 - Cadastrar veículo");
         Console.WriteLine("2 - Pagar e Retirar veículo");
         Console.WriteLine("3 - Listar veículos");
         Console.WriteLine("4 - Encerrar");
         Console.WriteLine("Digite a opção escolhida, abaixo:");
     }
 
-    private static bool VeiculoEstaCadastrado(string placa, List<VeiculoEstacionamento> veiculos)
+    private static VeiculoEstacionamento? BuscaVeiculo(string placa, List<VeiculoEstacionamento> veiculos)
     {
-        return veiculos.Any(v => v.Placa.Equals(placa, StringComparison.OrdinalIgnoreCase));
+        return veiculos.FirstOrDefault(v => v.Placa == placa);
     }
 
     private static string PerguntaPlacaVeiculo(ref string placa)

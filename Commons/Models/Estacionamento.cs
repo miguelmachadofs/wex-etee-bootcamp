@@ -18,16 +18,9 @@ namespace Commons.Models
             Console.WriteLine($"Veículo com placa {placa} cadastrado com sucesso.");
         }
 
-        public void RemoverVeiculo(VeiculoEstacionamento veiculo)
+        public bool RemoverVeiculo(VeiculoEstacionamento veiculo)
         {
-            if (Veiculos.Remove(veiculo))
-            {
-                Console.WriteLine($"Veículo com placa {veiculo.Placa} removido com sucesso do sistema.");
-            }
-            else
-            {
-                Console.WriteLine($"ERRO: Não foi possível remover o veículo com placa {veiculo.Placa} do sistema.");
-            }
+            return Veiculos.Remove(veiculo);
         }
 
         public void ListarVeiculos()
