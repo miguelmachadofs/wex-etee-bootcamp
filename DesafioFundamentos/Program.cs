@@ -20,13 +20,14 @@ class Program
             {
                 case "1":
                     // Obtém e Valida a placa do veículo a ser cadastrado
-                    if (PlacaVeiculoEhValida(PerguntaPlacaVeiculo(ref placa)))
+                    if (ObtemEValidaPlacaVeiculo(ref placa))
                     {
                         // Verifica se o veículo já está cadastrado
                         // Se não estiver, cadastra o veículo no estacionamento
                         if (BuscaVeiculo(placa, estacionamento.Veiculos) == null)
                         {
                             estacionamento.CadastrarVeiculo(placa);
+                            Console.WriteLine($"Veículo com placa {placa} cadastrado com sucesso.");
                         }
                         else
                         {
@@ -36,7 +37,7 @@ class Program
                     break;
                 case "2":
                     // Obtém e Valida a placa do veículo a ser retirado
-                    if (PlacaVeiculoEhValida(PerguntaPlacaVeiculo(ref placa)))
+                    if (ObtemEValidaPlacaVeiculo(ref placa))
                     {
                         // Verifica se o veículo está cadastrado
                         // Se estiver, calcula o valor total a pagar e remove o veículo do estacionamento
@@ -96,21 +97,31 @@ class Program
         return veiculos.FirstOrDefault(v => v.Placa == placa);
     }
 
-    private static string PerguntaPlacaVeiculo(ref string placa)
+    private static bool ObtemEValidaPlacaVeiculo(ref string placa)
     {
-        // Obtém a placa do veículo informada pelo usuário
-        Console.WriteLine("Digite a placa do veículo:");
-        placa = Console.ReadLine()?.Trim().ToUpper() ?? string.Empty;
-        return placa;
-    }
-
-    private static bool PlacaVeiculoEhValida(string placa)
-    {
-        if (string.IsNullOrEmpty(placa))
+        string retornoUsuario;
+        do
         {
-            Console.WriteLine("Placa inválida. A placa não pode ser vazia.");
-            return false;
-        }
+            // Obtém a placa do veículo informada pelo usuário
+            Console.WriteLine("Digite a placa do veículo ou '0' para voltar ao menu:");
+            retornoUsuario = Console.ReadLine()?.Trim().ToUpper() ?? string.Empty;
+
+            // Verifica se a placa é válida (não pode ser vazia)
+            if (string.IsNullOrEmpty(retornoUsuario))
+            {
+                Console.WriteLine("Placa inválida. A placa não pode ser vazia.");
+            }
+            // Se o usuário digitar '0', retorna false e volta para o menu
+            else if (retornoUsuario == "0")
+            {
+                return false;
+            }
+
+            // Loop continua até que uma placa válida seja informada
+        } while (string.IsNullOrEmpty(retornoUsuario));
+
+        // Atribui o valor recebido e validado
+        placa = retornoUsuario;
         return true;
     }
 }

@@ -15,7 +15,6 @@ namespace Commons.Models
         public void CadastrarVeiculo(string placa)
         {
             Veiculos.Add(new VeiculoEstacionamento(placa));
-            Console.WriteLine($"Veículo com placa {placa} cadastrado com sucesso.");
         }
 
         public bool RemoverVeiculo(VeiculoEstacionamento veiculo)
